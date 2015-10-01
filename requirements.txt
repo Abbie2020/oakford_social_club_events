@@ -3,3 +3,4 @@
 # Find out more: https://morph.io/documentation/python
 
 python-dateutil==2.4.2
+lxml==3.4.4
