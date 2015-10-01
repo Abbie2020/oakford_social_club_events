@@ -1,24 +1,37 @@
-# This is a template for a Python scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
+from lxml import html
+import requests
+import scraperwiki
+import time
+import string
+from dateutil.parser import parse
 
-# import scraperwiki
-# import lxml.html
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-#
-# # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
-
-# You don't have to do things with the ScraperWiki and lxml libraries.
-# You can use whatever libraries you want: https://morph.io/documentation/python
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+def scrape_events():
+    page = requests.get('https://www.oakfordsocialclub.com/events')
+    tree = html.fromstring(page.text)
+    sections = tree.xpath('//div[@class="accordion--accordion"]/section')
+    count = 0
+    for section in sections:
+        h1 = section.xpath('.//h1/text()')
+        title = h1[0].split('- ',1)[0]
+        date = h1[0].split('- ',1)[1]
+        date = parse(date)
+        date = date.strftime('%Y-%m-%d')
+        event_time = section.xpath('.//div[@class="text--only"]/p[1]/text()')
+        description = section.xpath('.//div[@class="text--only"]/p[2]/text()')
+        count += 1
+        
+        data = {
+            'id': count,
+            'title': title,
+            'date': date,
+            'time': event_time[0],
+            'description': description[0],
+            'venue': 'Oakford Social Club',
+            'location': 'Reading',
+            }
+        print data
+        
+        scraperwiki.sqlite.save(unique_keys = ['id'], data = data)
+        time.sleep(0.5)
+    
+scrape_events()
