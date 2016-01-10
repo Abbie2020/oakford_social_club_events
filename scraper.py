@@ -22,7 +22,7 @@ def scrape_events():
         count += 1
         
         data = {
-            'id': id,
+            'id': 'oak' + str(id),
             'title': title,
             'date': date,
             'time': event_time[0],
