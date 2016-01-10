@@ -15,13 +15,14 @@ def scrape_events():
         title = h1[0].split('- ',1)[0]
         date = h1[0].split('- ',1)[1]
         date = parse(date)
+        id = date.strftime('%Y%m%d')
         date = date.strftime('%Y-%m-%d')
         event_time = section.xpath('.//div[@class="text--only"]/p[1]/text()')
         description = section.xpath('.//div[@class="text--only"]/p[2]/text()')
         count += 1
         
         data = {
-            'id': count,
+            'id': id,
             'title': title,
             'date': date,
             'time': event_time[0],
