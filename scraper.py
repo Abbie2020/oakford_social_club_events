@@ -35,5 +35,5 @@ def scrape_events():
         time.sleep(0.5)
     
 print scraperwiki.sql.show_tables()
-scraperwiki.sqlite.execute("DELETE FROM swdata")
+scraperwiki.sqlite.execute("DELETE FROM data")
 scrape_events()
