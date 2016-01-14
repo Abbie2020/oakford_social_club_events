@@ -34,6 +34,7 @@ def scrape_events():
         scraperwiki.sqlite.save(unique_keys = ['id'], data = data)
         time.sleep(0.5)
     
-print scraperwiki.sql.show_tables()
-scraperwiki.sqlite.execute("DELETE FROM data")
+if scraperwiki.sql.show_tables():
+    scraperwiki.sqlite.execute("DELETE FROM data") #use 'swdata' on Mac, use 'data' on morph.io
+
 scrape_events()
